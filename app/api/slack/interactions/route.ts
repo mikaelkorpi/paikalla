@@ -46,7 +46,7 @@ async function updatePollMessage(weekId: string, weekStart: Date, messageTs: str
     channel: process.env.SLACK_CHANNEL_ID!,
     ts: messageTs,
     blocks: blocks as any,
-    text: 'Toimistolla tällä viikolla?',
+    text: 'Who is in the office this week?',
   })
 }
 
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
     if (week.is_closed) {
       return Response.json({
         response_action: 'errors',
-        errors: { days_block: 'Poll on suljettu pe 15:00' },
+        errors: { days_block: 'The poll is closed — Friday 15:00' },
       })
     }
 

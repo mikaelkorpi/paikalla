@@ -51,7 +51,7 @@ export default async function DashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Office Quest</h2>
-            <a href="/dashboard/history" className="text-xs text-blue-500 hover:underline">Historia →</a>
+            <a href="/dashboard/history" className="text-xs text-blue-500 hover:underline">History →</a>
           </div>
           <Leaderboard users={users ?? []} weekXpMap={weekXpMap} />
         </div>

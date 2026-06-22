@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   const msg = await slack.chat.postMessage({
     channel: process.env.SLACK_CHANNEL_ID!,
     blocks: blocks as any,
-    text: 'Toimistolla tällä viikolla?',
+    text: 'Who is in the office this week?',
   })
 
   await supabaseAdmin

@@ -39,7 +39,7 @@ export default async function HistoryPage() {
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
         <div className="flex items-center gap-3">
           <a href="/dashboard" className="text-xs text-blue-500 hover:underline">← Back</a>
-          <h1 className="text-2xl font-black tracking-tight" style={{ color: 'var(--text)' }}>Historia</h1>
+          <h1 className="text-2xl font-black tracking-tight" style={{ color: 'var(--text)' }}>History</h1>
         </div>
 
         <div>

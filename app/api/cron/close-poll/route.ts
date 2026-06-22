@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       channel: process.env.SLACK_CHANNEL_ID!,
       ts: week.slack_message_ts,
       blocks: blocks as any,
-      text: 'Toimistolla tällä viikolla (suljettu)',
+      text: 'In the office this week (closed)',
     })
   }
 

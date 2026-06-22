@@ -15,8 +15,8 @@ export function buildPollBlocks(
   }).join('\n')
 
   const title = isClosed
-    ? `📅 *Toimistolla tällä viikolla* (${weekLabel}) _(suljettu)_`
-    : `📅 *Toimistolla tällä viikolla* (${weekLabel})`
+    ? `📅 *In the office this week* (${weekLabel}) _(closed)_`
+    : `📅 *In the office this week* (${weekLabel})`
 
   const blocks: object[] = [
     { type: 'section', text: { type: 'mrkdwn', text: title } },
@@ -29,7 +29,7 @@ export function buildPollBlocks(
       elements: [
         {
           type: 'button',
-          text: { type: 'plain_text', text: 'Ilmoita / muuta päiväsi' },
+          text: { type: 'plain_text', text: 'Log your days' },
           action_id: 'open_attendance_modal',
           style: 'primary',
         },
@@ -74,8 +74,8 @@ export function buildModalView(weekStart: Date, currentDays: number[]) {
     type: 'modal',
     callback_id: 'attendance_modal',
     title: { type: 'plain_text', text: 'Office days this week' },
-    submit: { type: 'plain_text', text: 'Tallenna' },
-    close: { type: 'plain_text', text: 'Peruuta' },
+    submit: { type: 'plain_text', text: 'Save' },
+    close: { type: 'plain_text', text: 'Cancel' },
     blocks: [
       {
         type: 'section',
@@ -85,7 +85,7 @@ export function buildModalView(weekStart: Date, currentDays: number[]) {
         type: 'input',
         block_id: 'days_block',
         optional: true,
-        label: { type: 'plain_text', text: 'Valitse päivät' },
+        label: { type: 'plain_text', text: 'Select days' },
         element: {
           type: 'checkboxes',
           action_id: 'days_action',
