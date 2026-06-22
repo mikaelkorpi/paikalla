@@ -1,11 +1,13 @@
 export function getCurrentWeekStart(): Date {
-  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Helsinki' }))
-  const day = now.getDay()
-  const diff = day === 0 ? -6 : 1 - day
-  const monday = new Date(now)
-  monday.setDate(now.getDate() + diff)
-  monday.setHours(0, 0, 0, 0)
-  return monday
+  const now = new Date()
+  // Get current date in Helsinki timezone as YYYY-MM-DD
+  const helsinkiDate = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Helsinki' }) // en-CA gives YYYY-MM-DD
+  const [year, month, day] = helsinkiDate.split('-').map(Number)
+  const date = new Date(Date.UTC(year, month - 1, day))
+  const dow = date.getUTCDay() // 0=Sun
+  const diff = dow === 0 ? -6 : 1 - dow
+  date.setUTCDate(date.getUTCDate() + diff)
+  return date
 }
 
 export function getWeekNumber(date: Date): number {
