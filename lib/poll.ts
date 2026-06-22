@@ -60,7 +60,7 @@ export function buildModalView(weekStart: Date, currentDays: number[]) {
   return {
     type: 'modal',
     callback_id: 'attendance_modal',
-    title: { type: 'plain_text', text: 'Milloin tuut toimistolle?' },
+    title: { type: 'plain_text', text: 'Milloin tuut toimistoon?' },
     submit: { type: 'plain_text', text: 'Tallenna' },
     close: { type: 'plain_text', text: 'Peruuta' },
     blocks: [
