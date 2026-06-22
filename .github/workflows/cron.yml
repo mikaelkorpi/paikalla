@@ -13,9 +13,9 @@ jobs:
       - name: Trigger cron route
         run: |
           if [ "${{ github.event.schedule }}" = "0 5 * * 1" ]; then
-            curl -X POST https://paikalla.vercel.app/api/cron/open-poll \
+            curl -X POST https://paikalla-nine.vercel.app/api/cron/open-poll \
               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
           else
-            curl -X POST https://paikalla.vercel.app/api/cron/close-poll \
+            curl -X POST https://paikalla-nine.vercel.app/api/cron/close-poll \
               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
           fi
