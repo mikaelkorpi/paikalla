@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin as supabase } from '@/lib/supabase'
 import { AttendanceHistory } from '@/components/AttendanceHistory'
 import { getLevel, getNextLevel } from '@/lib/levels'
 

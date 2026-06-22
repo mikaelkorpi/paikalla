@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin as supabase } from '@/lib/supabase'
 import { Leaderboard } from '@/components/Leaderboard'
 import { WeekView } from '@/components/WeekView'
 import { getCurrentWeekStart, formatWeekLabel } from '@/lib/week'
