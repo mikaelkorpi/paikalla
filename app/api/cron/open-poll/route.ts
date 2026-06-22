@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     .from('weeks')
     .select('id')
     .eq('week_start', weekStartStr)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     return Response.json({ ok: true, skipped: true })
