@@ -22,7 +22,7 @@ export function formatWeekLabel(weekStart: Date): string {
   const end = new Date(weekStart)
   end.setDate(weekStart.getDate() + 4)
   const fmt = (d: Date) => `${d.getDate()}.${d.getMonth() + 1}.`
-  return `vk ${wn} · ${fmt(weekStart)}-${fmt(end)}`
+  return `w${wn} · ${fmt(weekStart)}-${fmt(end)}`
 }
 
 export function isPollOpen(week: { week_start: string; is_closed: boolean }): boolean {

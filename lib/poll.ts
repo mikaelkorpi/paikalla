@@ -1,6 +1,6 @@
 import { formatWeekLabel, getWeekNumber } from './week'
 
-const DAYS = ['Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai']
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 export function buildPollBlocks(
   weekStart: Date,
