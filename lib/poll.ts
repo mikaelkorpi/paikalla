@@ -33,12 +33,25 @@ export function buildPollBlocks(
           action_id: 'open_attendance_modal',
           style: 'primary',
         },
+        {
+          type: 'button',
+          text: { type: 'plain_text', text: '🏆 Leaderboard' },
+          action_id: 'open_dashboard',
+          url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+        },
       ],
     })
   } else {
     blocks.push({
-      type: 'section',
-      text: { type: 'mrkdwn', text: '_Poll suljettu – pe 15:00_' },
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: { type: 'plain_text', text: '🏆 Leaderboard' },
+          action_id: 'open_dashboard',
+          url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+        },
+      ],
     })
   }
 
