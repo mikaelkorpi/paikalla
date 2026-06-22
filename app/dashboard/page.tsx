@@ -29,17 +29,25 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-950">
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Paikalla</h1>
-          <p className="text-sm text-gray-500 mt-1">{formatWeekLabel(weekStart)}</p>
+        <div className="text-center py-6">
+          <h1 className="text-4xl font-black text-white tracking-tight">⚔️ Paikalla</h1>
+          <p className="text-gray-400 mt-1 text-sm">{formatWeekLabel(weekStart)} · Office Attendance Tracker</p>
         </div>
-        <WeekView attendances={attendances as any} isClosed={week?.is_closed ?? false} />
+
+        <div className="bg-gray-900 rounded-2xl border border-gray-800 p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-sm font-bold text-gray-300 uppercase tracking-widest">This Week</h2>
+            {week?.is_closed && <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded">closed</span>}
+          </div>
+          <WeekView attendances={attendances as any} isClosed={week?.is_closed ?? false} />
+        </div>
+
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-semibold text-gray-900">Pistetaulu</h2>
-            <a href="/dashboard/history" className="text-sm text-blue-600 hover:underline">Historia</a>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-bold text-gray-300 uppercase tracking-widest">🏆 Hall of Heroes</h2>
+            <a href="/dashboard/history" className="text-xs text-blue-400 hover:underline">Historia →</a>
           </div>
           <Leaderboard users={users ?? []} weekXpMap={weekXpMap} />
         </div>
