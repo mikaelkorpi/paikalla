@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { getLevel, getNextLevel, levelColor } from '@/lib/levels'
 
 type User = {
@@ -36,25 +35,12 @@ export function UserCard({ user, rank, weekXp }: { user: User; rank: number; wee
           {!rankStyle && <span className="text-xs text-gray-500 font-bold">#{rank}</span>}
         </div>
 
-        {user.avatar_url ? (
-          <div className="relative">
-            <Image
-              src={user.avatar_url}
-              alt={user.display_name}
-              width={48}
-              height={48}
-              className="rounded-full"
-              style={{ border: `2px solid ${color}` }}
-            />
-          </div>
-        ) : (
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white"
-            style={{ backgroundColor: color + '33', border: `2px solid ${color}` }}
-          >
-            {user.display_name[0]}
-          </div>
-        )}
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+          style={{ backgroundColor: color + '22', border: `2px solid ${color}55` }}
+        >
+          {levelInfo.emoji}
+        </div>
 
         <div className="flex-1 min-w-0">
           <p className="font-bold text-white truncate">{user.display_name}</p>
@@ -62,7 +48,7 @@ export function UserCard({ user, rank, weekXp }: { user: User; rank: number; wee
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold tracking-wide mt-0.5"
             style={{ backgroundColor: color + '22', color, border: `1px solid ${color}55` }}
           >
-            ⚔️ Lv{levelInfo.level} · {levelInfo.title}
+            {levelInfo.emoji} Lv{levelInfo.level} · {levelInfo.title}
           </span>
         </div>
 
