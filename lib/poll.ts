@@ -35,7 +35,7 @@ export function buildPollBlocks(
         },
         {
           type: 'button',
-          text: { type: 'plain_text', text: '🏆 Leaderboard' },
+          text: { type: 'plain_text', text: '🏆 Office Quest' },
           action_id: 'open_dashboard',
           url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
         },
@@ -47,7 +47,7 @@ export function buildPollBlocks(
       elements: [
         {
           type: 'button',
-          text: { type: 'plain_text', text: '🏆 Leaderboard' },
+          text: { type: 'plain_text', text: '🏆 Office Quest' },
           action_id: 'open_dashboard',
           url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
         },
