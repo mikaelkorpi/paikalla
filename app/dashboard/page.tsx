@@ -1,6 +1,7 @@
 import { supabaseAdmin as supabase } from '@/lib/supabase'
 import { Leaderboard } from '@/components/Leaderboard'
 import { WeekView } from '@/components/WeekView'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { getCurrentWeekStart, formatWeekLabel } from '@/lib/week'
 
 export const revalidate = 30
@@ -31,9 +32,12 @@ export default async function DashboardPage() {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: 'var(--bg)' }}>
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-        <div className="text-center py-6">
-          <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--text)' }}>Paikalla</h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>{formatWeekLabel(weekStart)} · Office Attendance Tracker</p>
+        <div className="flex items-center justify-between py-6">
+          <div>
+            <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--text)' }}>Paikalla</h1>
+            <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>{formatWeekLabel(weekStart)} · Office Attendance Tracker</p>
+          </div>
+          <ThemeToggle />
         </div>
 
         <div className="rounded-2xl border p-4" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}>
