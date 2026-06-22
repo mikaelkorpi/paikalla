@@ -13,14 +13,18 @@ export async function POST(req: NextRequest) {
   const weekStart = getCurrentWeekStart()
   const weekStartStr = weekStart.toISOString().split('T')[0]
 
-  const { data: existing } = await supabaseAdmin
+  const { data: existing, error: existingError } = await supabaseAdmin
     .from('weeks')
     .select('id')
     .eq('week_start', weekStartStr)
     .maybeSingle()
 
   if (existing) {
-    return Response.json({ ok: true, skipped: true })
+    return Response.json({ ok: true, skipped: true, weekStartStr, existingId: existing.id })
+  }
+
+  if (existingError) {
+    return Response.json({ ok: false, step: 'check-existing', error: existingError.message }, { status: 500 })
   }
 
   const { data: week, error } = await supabaseAdmin
