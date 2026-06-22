@@ -29,25 +29,25 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-950">
+    <main style={{ minHeight: '100vh', backgroundColor: 'var(--bg)' }}>
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
         <div className="text-center py-6">
-          <h1 className="text-4xl font-black text-white tracking-tight">⚔️ Paikalla</h1>
-          <p className="text-gray-400 mt-1 text-sm">{formatWeekLabel(weekStart)} · Office Attendance Tracker</p>
+          <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--text)' }}>Paikalla</h1>
+          <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>{formatWeekLabel(weekStart)} · Office Attendance Tracker</p>
         </div>
 
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 p-4">
+        <div className="rounded-2xl border p-4" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}>
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-sm font-bold text-gray-300 uppercase tracking-widest">This Week</h2>
-            {week?.is_closed && <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded">closed</span>}
+            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>This Week</h2>
+            {week?.is_closed && <span className="text-xs px-2 py-0.5 rounded" style={{ color: 'var(--text-faint)', backgroundColor: 'var(--bg-card2)' }}>closed</span>}
           </div>
           <WeekView attendances={attendances as any} isClosed={week?.is_closed ?? false} />
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-gray-300 uppercase tracking-widest">🏆 Hall of Heroes</h2>
-            <a href="/dashboard/history" className="text-xs text-blue-400 hover:underline">Historia →</a>
+            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Office Quest</h2>
+            <a href="/dashboard/history" className="text-xs text-blue-500 hover:underline">Historia →</a>
           </div>
           <Leaderboard users={users ?? []} weekXpMap={weekXpMap} />
         </div>
