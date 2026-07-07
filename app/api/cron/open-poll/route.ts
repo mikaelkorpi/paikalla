@@ -4,7 +4,7 @@ import { slack } from '@/lib/slack'
 import { getCurrentWeekStart } from '@/lib/week'
 import { buildPollBlocks } from '@/lib/poll'
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 })
