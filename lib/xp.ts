@@ -1,5 +1,6 @@
 import { supabaseAdmin } from './supabase'
 import { getLevel } from './levels'
+import { getEventForWeek } from './events'
 
 const XP_RULES = {
   PER_DAY: 15,
@@ -35,6 +36,10 @@ export async function awardXpForWeek(weekId: string): Promise<string[]> {
     .single()
 
   const weekStart = new Date(week!.week_start)
+
+  const event = getEventForWeek(week!.week_start)
+  const teamTotalDays = attendances.reduce((s, a) => s + a.days.length, 0)
+  const eventWon = !!event && teamTotalDays >= event.teamGoalDays
   const past3Mondays = [1, 2, 3].map(i => {
     const d = new Date(weekStart)
     d.setDate(weekStart.getDate() - 7 * i)
@@ -69,6 +74,10 @@ export async function awardXpForWeek(weekId: string): Promise<string[]> {
     if (warriorUserIds.has(a.user_id)) {
       events.push({ type: 'office_warrior', xp: XP_RULES.OFFICE_WARRIOR, description: 'Ainoa toimistolla yhtenä päivänä' })
       officeWarriorUsers.push(a.user_id)
+    }
+
+    if (event && eventWon && daysCount >= event.minDaysForBonus) {
+      events.push({ type: event.xpType, xp: event.bonusXp, description: event.xpName })
     }
 
     if (pastWeeks && pastWeeks.length === 3) {
