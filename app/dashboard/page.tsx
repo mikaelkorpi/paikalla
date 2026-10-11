@@ -1,17 +1,22 @@
 import { supabaseAdmin as supabase } from '@/lib/supabase'
 import { Leaderboard } from '@/components/Leaderboard'
 import { WeekView } from '@/components/WeekView'
-import { ThemeToggle } from '@/components/ThemeToggle'
 import { getCurrentWeekStart, formatWeekLabel } from '@/lib/week'
 
 export const revalidate = 30
+
+function helsinkiWeekday(): number | null {
+  const name = new Date().toLocaleDateString('en-US', { weekday: 'short', timeZone: 'Europe/Helsinki' })
+  const idx = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].indexOf(name)
+  return idx === -1 ? null : idx + 1
+}
 
 export default async function DashboardPage() {
   const weekStart = getCurrentWeekStart()
   const weekStartStr = weekStart.toISOString().split('T')[0]
 
   const [{ data: week }, { data: users }] = await Promise.all([
-    supabase.from('weeks').select('id, is_closed').eq('week_start', weekStartStr).single(),
+    supabase.from('weeks').select('id, is_closed').eq('week_start', weekStartStr).maybeSingle(),
     supabase.from('users').select('id, display_name, avatar_url, total_xp, level').order('total_xp', { ascending: false }),
   ])
 
@@ -30,31 +35,42 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: 'var(--bg)' }}>
-      <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-        <div className="flex items-center justify-between py-6">
-          <div>
-            <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--text)' }}>Paikalla</h1>
-            <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>{formatWeekLabel(weekStart)} · Office Attendance Tracker</p>
-          </div>
-          <ThemeToggle />
-        </div>
+    <main className="min-h-screen">
+      <div className="max-w-2xl mx-auto px-4 py-8 space-y-10">
+        <header className="pt-4">
+          <h1 className="font-pixel text-[22px] sm:text-[28px]" style={{ color: 'var(--gold)' }}>
+            OFFICE QUEST
+          </h1>
+          <p className="mt-2 max-w-prose" style={{ color: 'var(--text-muted)' }}>
+            Who shows up at the Ilmiö office, and how far each traveller has come.
+            <span className="blink" aria-hidden="true">_</span>
+          </p>
+          <nav className="mt-4 flex gap-3 text-[17px]">
+            <a href="/lore" className="px-btn">The story</a>
+            <a href="/admin" className="px-btn">Admin</a>
+          </nav>
+        </header>
 
-        <div className="rounded-2xl border p-4" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}>
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>This Week</h2>
-            {week?.is_closed && <span className="text-xs px-2 py-0.5 rounded" style={{ color: 'var(--text-faint)', backgroundColor: 'var(--bg-card2)' }}>closed</span>}
+        <section>
+          <div className="flex items-baseline justify-between mb-3">
+            <h2 className="font-pixel text-[12px]">THIS WEEK</h2>
+            <span style={{ color: 'var(--text-muted)' }}>
+              {formatWeekLabel(weekStart)}{week?.is_closed ? ', closed' : ''}
+            </span>
           </div>
-          <WeekView attendances={attendances as any} isClosed={week?.is_closed ?? false} />
-        </div>
+          <div className="px-box p-3 sm:p-4">
+            <WeekView attendances={attendances as any} isClosed={week?.is_closed ?? false} today={helsinkiWeekday()} />
+          </div>
+        </section>
 
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Office Quest</h2>
-            <a href="/dashboard/history" className="text-xs text-blue-500 hover:underline">History →</a>
-          </div>
+        <section>
+          <h2 className="font-pixel text-[12px] mb-3">HALL OF FAME</h2>
           <Leaderboard users={users ?? []} weekXpMap={weekXpMap} />
-        </div>
+        </section>
+
+        <footer className="pt-6" style={{ color: 'var(--text-faint)' }}>
+          Log your days from the weekly poll in Slack. XP is awarded when the week closes on Friday.
+        </footer>
       </div>
     </main>
   )
