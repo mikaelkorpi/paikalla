@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { slack } from '@/lib/slack'
-import { getCurrentWeekStart } from '@/lib/week'
+import { getCurrentWeekStart, getNextWeekStart } from '@/lib/week'
+import { openPollForWeek } from '@/lib/openPoll'
 import { buildPollBlocks } from '@/lib/poll'
 import { awardXpForWeek } from '@/lib/xp'
 
@@ -22,7 +23,8 @@ export async function GET(req: NextRequest) {
     .single()
 
   if (!week) {
-    return Response.json({ ok: true, skipped: true })
+    const next = await openPollForWeek(getNextWeekStart())
+    return Response.json({ ok: true, skipped: true, next })
   }
 
   await supabaseAdmin.from('weeks').update({ is_closed: true }).eq('id', week.id)
@@ -143,5 +145,12 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return Response.json({ ok: true })
+  let next
+  try {
+    next = await openPollForWeek(getNextWeekStart())
+  } catch (e) {
+    next = { ok: false, error: String(e) }
+  }
+
+  return Response.json({ ok: true, next })
 }
