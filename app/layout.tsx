@@ -1,30 +1,19 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Press_Start_2P, VT323 } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const pixel = Press_Start_2P({ weight: '400', subsets: ['latin'], variable: '--font-pixel' })
+const body = VT323({ weight: '400', subsets: ['latin'], variable: '--font-body' })
 
 export const metadata: Metadata = {
-  title: 'Paikalla',
-  description: 'Ilmiö office attendance tracker',
+  title: 'Office Quest',
+  description: 'Paikalla: who shows up at the Ilmiö office, and how far they have travelled.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fi">
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: `
-  (function() {
-    try {
-      var stored = localStorage.getItem('theme');
-      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var theme = stored || (prefersDark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
-    } catch(e) {}
-  })();
-` }} />
-      </head>
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={`${pixel.variable} ${body.variable}`}>
+      <body>{children}</body>
     </html>
   )
 }
