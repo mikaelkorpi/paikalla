@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { slack, verifySlackSignature } from '@/lib/slack'
-import { getCurrentWeekStart } from '@/lib/week'
 import { buildModalView, buildPollBlocks } from '@/lib/poll'
 
 async function getOrCreateUser(slackUserId: string) {
@@ -61,32 +60,36 @@ export async function POST(req: NextRequest) {
   const payload = JSON.parse(params.get('payload') || '{}')
 
   if (payload.type === 'block_actions') {
+    if (payload.actions?.[0]?.action_id !== 'open_attendance_modal') {
+      return Response.json({})
+    }
+
     const slackUserId = payload.user?.id
     const triggerId = payload.trigger_id
 
     const user = await getOrCreateUser(slackUserId)
     if (!user) return Response.json({ ok: false }, { status: 500 })
 
-    const weekStart = getCurrentWeekStart()
-    const weekStartStr = weekStart.toISOString().split('T')[0]
+    const messageTs = payload.container?.message_ts ?? payload.message?.ts
 
     const { data: week } = await supabaseAdmin
       .from('weeks')
-      .select('id, is_closed')
-      .eq('week_start', weekStartStr)
-      .single()
+      .select('id, is_closed, week_start')
+      .eq('slack_message_ts', messageTs)
+      .maybeSingle()
 
     if (!week || week.is_closed) return Response.json({})
+
+    const weekStart = new Date(week.week_start)
 
     const { data: attendance } = await supabaseAdmin
       .from('attendance')
       .select('days')
       .eq('user_id', user.id)
       .eq('week_id', week.id)
-      .single()
+      .maybeSingle()
 
-    const currentDays = attendance?.days ?? []
-    const modalView = buildModalView(weekStart, currentDays)
+    const modalView = buildModalView(weekStart, attendance?.days ?? [], week.id)
 
     await slack.views.open({ trigger_id: triggerId, view: modalView as any })
     return Response.json({})
@@ -99,16 +102,15 @@ export async function POST(req: NextRequest) {
     const user = await getOrCreateUser(slackUserId)
     if (!user) return Response.json({ response_action: 'clear' })
 
-    const weekStart = getCurrentWeekStart()
-    const weekStartStr = weekStart.toISOString().split('T')[0]
-
     const { data: week } = await supabaseAdmin
       .from('weeks')
-      .select('id, is_closed, slack_message_ts')
-      .eq('week_start', weekStartStr)
-      .single()
+      .select('id, is_closed, slack_message_ts, week_start')
+      .eq('id', payload.view?.private_metadata)
+      .maybeSingle()
 
     if (!week) return Response.json({ response_action: 'clear' })
+
+    const weekStart = new Date(week.week_start)
 
     if (week.is_closed) {
       return Response.json({
