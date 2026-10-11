@@ -1,6 +1,6 @@
 import { LEVELS } from '@/lib/levels'
-import { CHAPTERS } from '@/lib/lore'
-import { Sprite } from '@/lib/sprite'
+import { CHAPTERS, WORLD_INTRO } from '@/lib/lore'
+import { Sprite, SPECIES } from '@/lib/sprite'
 
 export default function LorePage() {
   return (
@@ -10,17 +10,33 @@ export default function LorePage() {
           <a href="/dashboard" className="px-btn text-[17px]">Back</a>
           <h1 className="font-pixel text-[20px] mt-6" style={{ color: 'var(--gold)' }}>THE STORY</h1>
           <p className="mt-3 max-w-prose" style={{ color: 'var(--text-muted)' }}>
-            The Office is a realm with a door at its edge. Every traveller who steps through walks the same road,
-            one chapter at a time. Each day at the office is a step. Each closed week is a page.
+            {WORLD_INTRO}
           </p>
         </header>
+
+        <section className="px-box p-4">
+          <h2 className="font-pixel text-[12px] mb-3">WHO WALKS THE ROAD</h2>
+          <p style={{ color: 'var(--text-muted)' }}>
+            Every traveller is born as one of six creatures, and stays that creature for life. The level shows in the
+            clothes and in what they carry: a cup from the Machine, a map of the corridors, a spark, a shield, a trophy,
+            and at the end a crown.
+          </p>
+          <div className="flex flex-wrap gap-3 mt-3">
+            {SPECIES.map((s, i) => (
+              <div key={s.key} className="flex flex-col items-center">
+                <Sprite seed={s.key} species={s.key} level={1 + i} size={56} title={s.name} />
+                <span className="text-[15px]" style={{ color: 'var(--text-muted)' }}>{s.name}</span>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <ol className="space-y-5">
           {CHAPTERS.map(ch => {
             const level = LEVELS.find(l => l.level === ch.level)!
             return (
               <li key={ch.level} className="px-box p-4 flex gap-4">
-                <Sprite level={ch.level} size={64} title={level.title} />
+                <Sprite seed={`chapter-${ch.level}`} species={SPECIES[(ch.level - 1) % SPECIES.length].key} level={ch.level} size={64} title={level.title} />
                 <div className="min-w-0">
                   <p className="font-pixel text-[10px]" style={{ color: 'var(--text-muted)' }}>
                     LEVEL {ch.level} / {level.minXp} XP
