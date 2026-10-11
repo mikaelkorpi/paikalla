@@ -16,6 +16,9 @@ export const CHAPTERS: Chapter[] = [
   { level: 10, title: 'Told through you', text: 'The realm no longer needs to be explored by you. When people describe Ilmiö, they are describing you.' },
 ]
 
+export const HAUNTING =
+  'Once a year, in the last week of October, the realm is not itself. Five ghosts move into Ilmiö: one in the Machine, one under the good desk, one in the quiet call room, two in the kitchen. They feed on empty chairs. Every day a traveller spends at the office banishes a little of them, and when the whole team has logged enough days the office is clear again. The travellers who stood their ground for two days or more are remembered as Ghost hunters.'
+
 export function chapterFor(level: number): Chapter {
   return CHAPTERS.find(c => c.level === level) ?? CHAPTERS[0]
 }
@@ -26,6 +29,7 @@ export const EVENT_NAMES: Record<string, string> = {
   bonus_full_week: 'A full week in the realm',
   office_warrior: 'Lone guardian',
   streak: 'Unbroken chain',
+  event_ghost_hunter: 'Ghost hunter',
 }
 
 export function eventName(type: string): string {
