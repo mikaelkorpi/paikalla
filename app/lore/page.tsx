@@ -1,5 +1,5 @@
 import { LEVELS } from '@/lib/levels'
-import { CHAPTERS, WORLD_INTRO } from '@/lib/lore'
+import { CHAPTERS, WORLD_INTRO, HAUNTING } from '@/lib/lore'
 import { Sprite, SPECIES } from '@/lib/sprite'
 
 export default function LorePage() {
@@ -50,6 +50,16 @@ export default function LorePage() {
           })}
         </ol>
 
+        <section className="px-box p-4" style={{ borderColor: 'var(--gold)' }}>
+          <div className="flex gap-4">
+            <Sprite seed="haunting" species="ghost" level={1} size={64} title="Ghost" />
+            <div>
+              <h2 className="font-pixel text-[12px] mb-2" style={{ color: 'var(--gold)' }}>THE HAUNTING OF ILMIÖ</h2>
+              <p className="max-w-prose" style={{ color: 'var(--text-muted)' }}>{HAUNTING}</p>
+            </div>
+          </div>
+        </section>
+
         <section className="px-box p-4">
           <h2 className="font-pixel text-[12px] mb-3">HOW XP IS EARNED</h2>
           <ul className="space-y-1" style={{ color: 'var(--text-muted)' }}>
@@ -58,6 +68,7 @@ export default function LorePage() {
             <li>A full week in the realm: 50 XP for all five days.</li>
             <li>Lone guardian: 30 XP for being the only one in on a given day.</li>
             <li>Unbroken chain: 100 XP for four weeks in a row.</li>
+            <li>Ghost hunter: 40 XP for 2+ days during the Haunting, if the team banishes the ghosts.</li>
           </ul>
         </section>
       </div>
