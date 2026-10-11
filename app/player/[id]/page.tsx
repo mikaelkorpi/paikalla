@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { supabaseAdmin as supabase } from '@/lib/supabase'
 import { getLevel, levelColor } from '@/lib/levels'
 import { chapterFor, eventName } from '@/lib/lore'
-import { Sprite } from '@/lib/sprite'
+import { Sprite, speciesFor } from '@/lib/sprite'
 import { XpBar } from '@/components/XpBar'
 import { formatWeekLabel } from '@/lib/week'
 
@@ -30,6 +30,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
   const level = getLevel(user.total_xp)
   const chapter = chapterFor(level.level)
   const color = levelColor(level.level)
+  const species = speciesFor(user.id)
 
   const daysByWeek: Record<string, number[]> = {}
   for (const a of attendance ?? []) daysByWeek[a.week_id] = a.days
@@ -62,11 +63,11 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
 
         <section className="px-box p-4 sm:p-6">
           <div className="flex gap-4 sm:gap-6 items-start">
-            <Sprite level={level.level} size={120} title={level.title} />
+            <Sprite seed={user.id} level={level.level} size={120} title={`${species.name}, ${level.title}`} />
             <div className="min-w-0 flex-1">
               <h1 className="text-[28px] leading-tight truncate">{user.display_name}</h1>
               <p className="font-pixel text-[11px] mt-1" style={{ color }}>
-                LV{level.level} {level.title.toUpperCase()}
+                {species.name.toUpperCase()} LV{level.level} {level.title.toUpperCase()}
               </p>
               <p className="mt-3 text-[17px]" style={{ color: 'var(--gold)' }}>{chapter.title}</p>
               <p className="mt-1 max-w-prose" style={{ color: 'var(--text-muted)' }}>{chapter.text}</p>
