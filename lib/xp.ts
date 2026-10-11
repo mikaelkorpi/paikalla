@@ -108,3 +108,34 @@ export async function awardXpForWeek(weekId: string): Promise<string[]> {
 
   return officeWarriorUsers
 }
+
+// Admin: remove the week's XP from totals, delete its events, then award again.
+// Only the edited week changes; XP from other weeks is untouched.
+export async function recomputeXpForWeek(weekId: string): Promise<void> {
+  const { data: oldEvents } = await supabaseAdmin
+    .from('xp_events')
+    .select('user_id, xp')
+    .eq('week_id', weekId)
+
+  const oldByUser: Record<string, number> = {}
+  for (const e of oldEvents ?? []) {
+    oldByUser[e.user_id] = (oldByUser[e.user_id] ?? 0) + e.xp
+  }
+
+  for (const [userId, xp] of Object.entries(oldByUser)) {
+    const { data: user } = await supabaseAdmin
+      .from('users')
+      .select('total_xp')
+      .eq('id', userId)
+      .single()
+    const newXp = Math.max(0, (user?.total_xp ?? 0) - xp)
+    await supabaseAdmin
+      .from('users')
+      .update({ total_xp: newXp, level: getLevel(newXp).level })
+      .eq('id', userId)
+  }
+
+  await supabaseAdmin.from('xp_events').delete().eq('week_id', weekId)
+
+  await awardXpForWeek(weekId)
+}
