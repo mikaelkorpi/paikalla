@@ -15,8 +15,8 @@ export function buildPollBlocks(
   }).join('\n')
 
   const title = isClosed
-    ? `📅 *In the office this week* (${weekLabel}) _(closed)_`
-    : `📅 *In the office this week* (${weekLabel})`
+    ? `📅 *In the office* (${weekLabel}) _(closed)_`
+    : `📅 *In the office* (${weekLabel})`
 
   const blocks: object[] = [
     { type: 'section', text: { type: 'mrkdwn', text: title } },
@@ -58,7 +58,7 @@ export function buildPollBlocks(
   return blocks
 }
 
-export function buildModalView(weekStart: Date, currentDays: number[]) {
+export function buildModalView(weekStart: Date, currentDays: number[], weekId: string) {
   const weekLabel = formatWeekLabel(weekStart)
   const dayOptions = [
     { text: { type: 'plain_text', text: 'Maanantai' }, value: '1' },
@@ -73,7 +73,8 @@ export function buildModalView(weekStart: Date, currentDays: number[]) {
   return {
     type: 'modal',
     callback_id: 'attendance_modal',
-    title: { type: 'plain_text', text: 'Office days this week' },
+    private_metadata: weekId,
+    title: { type: 'plain_text', text: 'Office days' },
     submit: { type: 'plain_text', text: 'Save' },
     close: { type: 'plain_text', text: 'Cancel' },
     blocks: [
