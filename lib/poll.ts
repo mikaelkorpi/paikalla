@@ -1,4 +1,5 @@
-import { formatWeekLabel, getWeekNumber } from './week'
+import { formatWeekLabel } from './week'
+import { getEventForWeek, eventStatus } from './events'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
@@ -22,6 +23,16 @@ export function buildPollBlocks(
     { type: 'section', text: { type: 'mrkdwn', text: title } },
     { type: 'section', text: { type: 'mrkdwn', text: dayLines } },
   ]
+
+  const event = getEventForWeek(weekStart.toISOString().split('T')[0])
+  if (event) {
+    const totalDays = Object.values(attendanceByDay).reduce((s, people) => s + people.length, 0)
+    const status = eventStatus(event, totalDays, isClosed)
+    blocks.push({
+      type: 'section',
+      text: { type: 'mrkdwn', text: `*${event.title}*  ${status.meter}\n${status.text}` },
+    })
+  }
 
   if (!isClosed) {
     blocks.push({
