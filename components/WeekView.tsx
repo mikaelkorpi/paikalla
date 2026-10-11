@@ -6,7 +6,15 @@ type Attendance = {
   users: { display_name: string }
 }
 
-export function WeekView({ attendances, isClosed }: { attendances: Attendance[]; isClosed: boolean }) {
+export function WeekView({
+  attendances,
+  isClosed,
+  today,
+}: {
+  attendances: Attendance[]
+  isClosed: boolean
+  today: number | null
+}) {
   const byDay: Record<number, string[]> = {}
   for (const a of attendances) {
     for (const d of a.days) {
@@ -16,18 +24,27 @@ export function WeekView({ attendances, isClosed }: { attendances: Attendance[];
   }
 
   return (
-    <div className="grid grid-cols-5 gap-2">
-      {DAY_NUMS.map((d, i) => (
-        <div key={d} className="rounded-lg p-2.5 border" style={{ backgroundColor: 'var(--bg-card2)', borderColor: 'var(--border)' }}>
-          <p className="text-xs font-bold mb-2 uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>{DAYS[i]}</p>
-          <div className="space-y-1">
-            {(byDay[d] ?? []).map(name => (
-              <p key={name} className="text-xs truncate" style={{ color: 'var(--text)' }}>{name}</p>
-            ))}
-            {(byDay[d] ?? []).length === 0 && <p className="text-xs" style={{ color: 'var(--text-faint)' }}>–</p>}
+    <div className="grid grid-cols-5 gap-2 sm:gap-3">
+      {DAY_NUMS.map((d, i) => {
+        const isToday = today === d && !isClosed
+        return (
+          <div
+            key={d}
+            className="px-box-inset p-2 min-h-[7rem]"
+            style={isToday ? { borderColor: 'var(--gold)' } : undefined}
+          >
+            <p className="font-pixel text-[10px] mb-2" style={{ color: isToday ? 'var(--gold)' : 'var(--text-muted)' }}>
+              {DAYS[i]}
+            </p>
+            <div className="space-y-0.5">
+              {(byDay[d] ?? []).map(name => (
+                <p key={name} className="truncate leading-tight">{name}</p>
+              ))}
+              {(byDay[d] ?? []).length === 0 && <p style={{ color: 'var(--text-faint)' }}>–</p>}
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
