@@ -36,3 +36,8 @@ export function isPollOpen(week: { week_start: string; is_closed: boolean }): bo
   close.setHours(15, 0, 0, 0)
   return now >= open && now < close
 }
+
+export function getNextWeekStart(): Date {
+  const monday = getCurrentWeekStart()
+  return new Date(Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate() + 7))
+}
