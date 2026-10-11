@@ -2,6 +2,7 @@ import { supabaseAdmin as supabase } from '@/lib/supabase'
 import { Leaderboard } from '@/components/Leaderboard'
 import { WeekView } from '@/components/WeekView'
 import { getCurrentWeekStart, formatWeekLabel } from '@/lib/week'
+import { getEventForWeek, eventStatus } from '@/lib/events'
 
 export const revalidate = 30
 
@@ -34,6 +35,11 @@ export default async function DashboardPage() {
     }
   }
 
+  const event = getEventForWeek(weekStartStr)
+  const eventState = event
+    ? eventStatus(event, attendances.reduce((s, a) => s + a.days.length, 0), week?.is_closed ?? false)
+    : null
+
   return (
     <main className="min-h-screen">
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-10">
@@ -50,6 +56,28 @@ export default async function DashboardPage() {
             <a href="/admin" className="px-btn">Admin</a>
           </nav>
         </header>
+
+        {event && eventState && (
+          <section className="px-box p-4" style={{ borderColor: 'var(--gold)' }}>
+            <div className="flex items-baseline justify-between gap-3 flex-wrap">
+              <h2 className="font-pixel text-[12px]" style={{ color: 'var(--gold)' }}>{event.title.toUpperCase()}</h2>
+              <span className="text-[22px] leading-none" aria-label={`${eventState.remaining} ghosts remaining`}>{eventState.meter}</span>
+            </div>
+            <p className="mt-2 max-w-prose">{eventState.text}</p>
+            <div className="mt-3 flex gap-[3px]" aria-hidden="true">
+              {Array.from({ length: event.teamGoalDays }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-3 flex-1"
+                  style={{ backgroundColor: i < eventState.totalDays ? 'var(--gold)' : 'var(--bg)', border: '2px solid var(--bg-card2)' }}
+                />
+              ))}
+            </div>
+            <p className="mt-1 text-[15px]" style={{ color: 'var(--text-muted)' }}>
+              {Math.min(eventState.totalDays, event.teamGoalDays)} of {event.teamGoalDays} team office days. <a href="/lore" className="underline">Read the story</a>
+            </p>
+          </section>
+        )}
 
         <section>
           <div className="flex items-baseline justify-between mb-3">
