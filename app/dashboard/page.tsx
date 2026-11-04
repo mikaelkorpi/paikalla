@@ -71,6 +71,7 @@ export default async function DashboardPage() {
             <span className="blink" aria-hidden="true">_</span>
           </p>
           <nav className="mt-4 flex gap-3 text-[17px]">
+            <a href="/wardrobe" className="px-btn">My wardrobe</a>
             <a href="/lore" className="px-btn">The story</a>
             <a href="/admin" className="px-btn">Admin</a>
           </nav>
@@ -155,12 +156,12 @@ export default async function DashboardPage() {
 
         <section id="wardrobe">
           <h2 className="font-pixel text-[12px] mb-1">WARDROBE</h2>
-          <p className="mb-3" style={{ color: 'var(--text-muted)' }}>Every item in the realm. Pick what you wear from the Wardrobe button in the weekly Slack poll.</p>
+          <p className="mb-3" style={{ color: 'var(--text-muted)' }}>Every item in the realm. Pick what you wear in <a href="/wardrobe" className="underline">My wardrobe</a>.</p>
           <Wardrobe users={allUsers} />
         </section>
 
         <footer className="pt-6" style={{ color: 'var(--text-faint)' }}>
-          Log your days from the weekly poll in Slack. XP is awarded when the week closes on Friday. Your XP unlocks things to wear, which you pick from the Wardrobe button in the Slack poll, and together the team&apos;s XP furnishes the office.
+          Log your days from the weekly poll in Slack. XP is awarded when the week closes on Friday. Your XP unlocks things to wear, which you pick in My wardrobe, and together the team&apos;s XP furnishes the office.
         </footer>
       </div>
     </main>
