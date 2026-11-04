@@ -78,3 +78,15 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 @media (prefers-reduced-motion: reduce) {
   .blink { animation: none; }
 }
+
+/* Office world */
+.world { width: 100%; height: auto; display: block; image-rendering: pixelated; shape-rendering: crispEdges; }
+.world text { shape-rendering: auto; }
+.world-avatar { cursor: pointer; }
+.world-avatar .nametag { opacity: 0; transition: opacity 0.1s steps(1); }
+.world-avatar:hover .nametag, .world-avatar:focus .nametag { opacity: 1; }
+.world .bob { animation: bob 1.6s steps(1) infinite; animation-delay: inherit; }
+@keyframes bob { 50% { transform: translateY(-1px); } }
+@media (prefers-reduced-motion: reduce) {
+  .world .bob { animation: none; }
+}
