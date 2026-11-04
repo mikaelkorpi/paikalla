@@ -46,8 +46,9 @@ export function buildPollBlocks(
         },
         {
           type: 'button',
-          text: { type: 'plain_text', text: '🎩 Wardrobe' },
-          action_id: 'open_wardrobe_modal',
+          text: { type: 'plain_text', text: '🎩 My wardrobe' },
+          action_id: 'open_wardrobe',
+          url: `${process.env.NEXT_PUBLIC_APP_URL}/wardrobe`,
         },
         {
           type: 'button',
@@ -63,8 +64,9 @@ export function buildPollBlocks(
       elements: [
         {
           type: 'button',
-          text: { type: 'plain_text', text: '🎩 Wardrobe' },
-          action_id: 'open_wardrobe_modal',
+          text: { type: 'plain_text', text: '🎩 My wardrobe' },
+          action_id: 'open_wardrobe',
+          url: `${process.env.NEXT_PUBLIC_APP_URL}/wardrobe`,
         },
         {
           type: 'button',

@@ -17,7 +17,7 @@ export const CHAPTERS: Chapter[] = [
 ]
 
 export const TRAVELLERS =
-  'Nobody is born into Ilmiö as a monster any more. Every traveller walks in looking like themselves, and the realm remembers their face. What changes is what they carry. Each level opens a new piece of the wardrobe: a mug from the Machine, a party hat, headphones for the quiet hours, and much later a top hat, a crown and a cape. Unlocked things stay unlocked for good, and every traveller chooses what to wear from the Wardrobe in the weekly Slack poll.'
+  'Nobody is born into Ilmiö as a monster any more. Every traveller walks in looking like themselves, and the realm remembers their face. What changes is what they carry. Each level opens a new piece of the wardrobe: a mug from the Machine, a party hat, headphones for the quiet hours, and much later a top hat, a crown and a cape. Unlocked things stay unlocked for good, and every traveller chooses what to wear in My wardrobe.'
 
 export const THE_OFFICE =
   'The office itself is alive. It started with the Machine, six desks and a rug, and it grows as the travellers do. Every point of XP anyone earns goes into a shared pool, and when the pool is deep enough the office furnishes itself with something new. On any given day the room shows who is actually in. Those working elsewhere wait just outside the door.'

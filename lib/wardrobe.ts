@@ -1,6 +1,6 @@
 // Wearables unlock per traveller level. Furniture unlocks from the whole team's XP.
 // Unlocks are derived from total_xp, so existing XP carries over as is.
-// What each person wears is their own choice (users.outfit), picked from the Wardrobe in Slack.
+// What each person wears is their own choice (users.outfit), picked in My wardrobe (/wardrobe).
 export type Slot = 'head' | 'face' | 'hand' | 'back'
 
 export type Wearable = { key: string; name: string; slot: Slot; level: number }
@@ -62,7 +62,7 @@ export function outfitFor(level: number, saved?: Outfit | null): Outfit {
   return outfit
 }
 
-// Keeps only valid, unlocked choices. Used when saving from Slack.
+// Keeps only valid, unlocked choices. Used when saving from My wardrobe.
 export function cleanOutfit(level: number, input: Record<string, string | undefined>): Outfit {
   const out: Outfit = {}
   for (const { key: slot } of SLOTS) {
