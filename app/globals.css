@@ -6,8 +6,8 @@
   --bg-card2: #232c47;
   --border: #f4efe0;
   --text: #f4efe0;
-  --text-muted: #9aa4c2;
-  --text-faint: #5c6788;
+  --text-muted: #c3cbe3;
+  --text-faint: #8e98b8;
   --gold: #f5c542;
   --green: #5be37a;
   --shadow: #05080f;
@@ -17,7 +17,7 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body), monospace;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1.3;
   -webkit-font-smoothing: none;
 }
@@ -33,8 +33,8 @@ body::before {
     to bottom,
     rgba(0, 0, 0, 0) 0px,
     rgba(0, 0, 0, 0) 3px,
-    rgba(0, 0, 0, 0.12) 3px,
-    rgba(0, 0, 0, 0.12) 4px
+    rgba(0, 0, 0, 0.06) 3px,
+    rgba(0, 0, 0, 0.06) 4px
   );
 }
 
