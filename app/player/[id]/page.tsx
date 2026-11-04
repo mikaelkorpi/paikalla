@@ -4,7 +4,8 @@ import { getLevel, levelColor } from '@/lib/levels'
 import { chapterFor, eventName } from '@/lib/lore'
 import { Avatar } from '@/lib/avatar'
 import { lookFor } from '@/lib/looks'
-import { outfitFor, WEARABLES } from '@/lib/wardrobe'
+import { outfitFor, wearable, WEARABLES } from '@/lib/wardrobe'
+import { loadOutfits } from '@/lib/outfits'
 import { XpBar } from '@/components/XpBar'
 import { formatWeekLabel } from '@/lib/week'
 
@@ -23,11 +24,14 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
     .maybeSingle()
   if (!user) notFound()
 
-  const [{ data: weeks }, { data: attendance }, { data: events }] = await Promise.all([
+  const [{ data: weeks }, { data: attendance }, { data: events }, outfits] = await Promise.all([
     supabase.from('weeks').select('id, week_start, is_closed').order('week_start', { ascending: false }),
     supabase.from('attendance').select('week_id, days').eq('user_id', id),
     supabase.from('xp_events').select('week_id, type, xp, description').eq('user_id', id),
+    loadOutfits([id]),
   ])
+  const saved = outfits[id] ?? null
+  const look = lookFor(user.display_name, user.id)
 
   const level = getLevel(user.total_xp)
   const chapter = chapterFor(level.level)
@@ -64,7 +68,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
 
         <section className="px-box p-4 sm:p-6">
           <div className="flex gap-4 sm:gap-6 items-start">
-            <Avatar look={lookFor(user.display_name, user.id)} outfit={outfitFor(level.level)} size={132} title={`${user.display_name}, ${level.title}`} />
+            <Avatar look={look} outfit={outfitFor(level.level, saved)} size={168} title={`${user.display_name}, ${level.title}`} />
             <div className="min-w-0 flex-1">
               <h1 className="text-[28px] leading-tight truncate">{user.display_name}</h1>
               <p className="font-pixel text-[11px] mt-1" style={{ color }}>
@@ -78,12 +82,9 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             <XpBar xp={user.total_xp} />
           </div>
           <p className="mt-3 text-[17px]" style={{ color: 'var(--text-muted)' }}>
-            Wardrobe:{' '}
-            {WEARABLES.map((w, i) => (
-              <span key={w.key} style={{ color: level.level >= w.level ? 'var(--text)' : 'var(--text-faint)' }}>
-                {w.name}{level.level >= w.level ? '' : ` (Lv${w.level})`}{i < WEARABLES.length - 1 ? ', ' : ''}
-              </span>
-            ))}
+            Wearing {Object.values(outfitFor(level.level, saved)).map(k => wearable(k)?.name).filter(Boolean).join(', ') || 'nothing special'}.{' '}
+            {WEARABLES.filter(w => level.level >= w.level).length} of {WEARABLES.length} items unlocked.{' '}
+            <a href="/dashboard#wardrobe" className="underline">Wardrobe</a>
           </p>
         </section>
 
@@ -106,7 +107,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             <div className="inline-grid gap-1" style={{ gridTemplateColumns: `auto repeat(${heatWeeks.length}, 14px)` }}>
               {DAY_LETTERS.map((d, r) => (
                 <div key={r} className="contents">
-                  <span className="text-[14px] pr-2 leading-[14px]" style={{ color: 'var(--text-faint)' }}>{d}</span>
+                  <span className="text-[17px] pr-2 leading-[14px]" style={{ color: 'var(--text-faint)' }}>{d}</span>
                   {heatWeeks.map(w => {
                     const on = (daysByWeek[w.id] ?? []).includes(r + 1)
                     return (
@@ -120,7 +121,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
                 </div>
               ))}
             </div>
-            <p className="mt-2 text-[15px]" style={{ color: 'var(--text-faint)' }}>Last {heatWeeks.length} weeks, oldest on the left.</p>
+            <p className="mt-2 text-[18px]" style={{ color: 'var(--text-faint)' }}>Last {heatWeeks.length} weeks, oldest on the left.</p>
           </div>
         </section>
 
