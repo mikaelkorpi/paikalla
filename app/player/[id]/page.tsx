@@ -84,7 +84,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           <p className="mt-3 text-[17px]" style={{ color: 'var(--text-muted)' }}>
             Wearing {Object.values(outfitFor(level.level, saved)).map(k => wearable(k)?.name).filter(Boolean).join(', ') || 'nothing special'}.{' '}
             {WEARABLES.filter(w => level.level >= w.level).length} of {WEARABLES.length} items unlocked.{' '}
-            <a href="/dashboard#wardrobe" className="underline">Wardrobe</a>
+            <a href="/wardrobe" className="underline">My wardrobe</a>
           </p>
         </section>
 
