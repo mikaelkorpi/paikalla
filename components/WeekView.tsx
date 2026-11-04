@@ -33,7 +33,7 @@ export function WeekView({
             className="px-box-inset p-2 min-h-[7rem]"
             style={isToday ? { borderColor: 'var(--gold)' } : undefined}
           >
-            <p className="font-pixel text-[10px] mb-2" style={{ color: isToday ? 'var(--gold)' : 'var(--text-muted)' }}>
+            <p className="font-pixel text-[11px] mb-2" style={{ color: isToday ? 'var(--gold)' : 'var(--text-muted)' }}>
               {DAYS[i]}
             </p>
             <div className="space-y-0.5">

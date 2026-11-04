@@ -1,6 +1,6 @@
 import { AvatarPixels, AV_H, AV_W } from '@/lib/avatar'
 import { lookFor } from '@/lib/looks'
-import { outfitFor, unlockedFurniture } from '@/lib/wardrobe'
+import { outfitFor, unlockedFurniture, type Outfit } from '@/lib/wardrobe'
 import { getLevel } from '@/lib/levels'
 
 // Isometric office. Grid N x N, tiles TW x TH. Back walls run along gx = 0 (left) and gy = 0 (right).
@@ -12,12 +12,14 @@ const OX = 144
 const OY = WALL + 12
 const VB_W = 288
 const VB_H = OY + N * TH + 24
+// People are drawn larger than the furniture scale so faces and items read clearly
+const AV_SCALE = 1.5
 
 type Pt = [number, number]
 const iso = (gx: number, gy: number, z = 0): Pt => [OX + (gx - gy) * (TW / 2), OY + (gx + gy) * (TH / 2) - z]
 const pts = (...p: Pt[]) => p.map(([x, y]) => `${x},${y}`).join(' ')
 
-export type WorldUser = { id: string; display_name: string; total_xp: number }
+export type WorldUser = { id: string; display_name: string; total_xp: number; outfit?: Outfit | null }
 
 type Item = { depth: number; node: React.ReactNode }
 
@@ -216,23 +218,25 @@ const STANDS: Pt[] = [[2, 1], [4, 1], [6, 1], [1, 2], [1, 4], [1, 6], [3, 4], [5
 function person(u: WorldUser, gx: number, gy: number, i: number): Item {
   const level = getLevel(u.total_xp)
   const look = lookFor(u.display_name, u.id)
-  const outfit = outfitFor(level.level)
+  const outfit = outfitFor(level.level, u.outfit)
   const [cx, cy] = iso(gx + 0.5, gy + 0.5)
-  const x = Math.round(cx - AV_W / 2)
-  const y = Math.round(cy - AV_H + 3)
+  const S = AV_SCALE
+  const y = Math.round(cy - AV_H * S + 3)
   const name = u.display_name.split(' ')[0]
   return {
     depth: gx + gy + 1.5,
     node: (
       <a key={u.id} href={`/player/${u.id}`} className="world-avatar" style={{ animationDelay: `${(i % 4) * 0.35}s` }}>
         <title>{`${u.display_name}, Lv${level.level} ${level.title}`}</title>
-        <ellipse cx={cx} cy={cy + 1} rx={6} ry={2.5} fill="rgba(0,0,0,0.3)" />
+        <ellipse cx={cx} cy={cy + 1} rx={8} ry={3} fill="rgba(0,0,0,0.3)" />
         <g className="bob">
-          <AvatarPixels look={look} outfit={outfit} x={x} y={y} />
+          <g transform={`translate(${Math.round(cx - (AV_W * S) / 2)} ${y}) scale(${S})`}>
+            <AvatarPixels look={look} outfit={outfit} />
+          </g>
         </g>
         <g className="nametag">
-          <rect x={cx - name.length * 2.2 - 3} y={y - 9} width={name.length * 4.4 + 6} height={8} fill="#0e1424" stroke="#f4efe0" strokeWidth={0.6} />
-          <text x={cx} y={y - 3} textAnchor="middle" fontSize={6} fontFamily="var(--font-body), monospace" fill="#f4efe0">{name}</text>
+          <rect x={cx - name.length * 2.8 - 4} y={y - 12} width={name.length * 5.6 + 8} height={11} fill="#0e1424" stroke="#f4efe0" strokeWidth={0.8} />
+          <text x={cx} y={y - 3.5} textAnchor="middle" fontSize={9} fontFamily="var(--font-body), monospace" fill="#f4efe0">{name}</text>
         </g>
       </a>
     ),
