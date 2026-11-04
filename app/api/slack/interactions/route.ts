@@ -2,6 +2,9 @@ import { NextRequest } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { slack, verifySlackSignature } from '@/lib/slack'
 import { buildModalView, buildPollBlocks } from '@/lib/poll'
+import { buildWardrobeModal, readWardrobeValues } from '@/lib/wardrobeSlack'
+import { cleanOutfit } from '@/lib/wardrobe'
+import { getLevel } from '@/lib/levels'
 
 async function getOrCreateUser(slackUserId: string) {
   const { data: existing } = await supabaseAdmin
@@ -58,6 +61,28 @@ export async function POST(req: NextRequest) {
 
   const params = new URLSearchParams(rawBody)
   const payload = JSON.parse(params.get('payload') || '{}')
+
+  if (payload.type === 'block_actions' && payload.actions?.[0]?.action_id === 'open_wardrobe_modal') {
+    const user = await getOrCreateUser(payload.user?.id)
+    if (!user) return Response.json({ ok: false }, { status: 500 })
+    await slack.views.open({
+      trigger_id: payload.trigger_id,
+      view: buildWardrobeModal(user.total_xp ?? 0, user.outfit ?? null, user.id) as any,
+    })
+    return Response.json({})
+  }
+
+  if (payload.type === 'view_submission' && payload.view?.callback_id === 'wardrobe_modal') {
+    const user = await getOrCreateUser(payload.user?.id)
+    if (!user) return Response.json({ response_action: 'clear' })
+    const picks = readWardrobeValues(payload.view?.state?.values ?? {})
+    const outfit = cleanOutfit(getLevel(user.total_xp ?? 0).level, picks)
+    const { error } = await supabaseAdmin.from('users').update({ outfit }).eq('id', user.id)
+    if (error) {
+      return Response.json({ response_action: 'errors', errors: { slot_head: 'Could not save right now. Try again in a moment.' } })
+    }
+    return Response.json({ response_action: 'clear' })
+  }
 
   if (payload.type === 'block_actions') {
     if (payload.actions?.[0]?.action_id !== 'open_attendance_modal') {
