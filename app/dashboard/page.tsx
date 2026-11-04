@@ -9,6 +9,7 @@ import { Avatar } from '@/lib/avatar'
 import { lookFor } from '@/lib/looks'
 import { outfitFor, nextFurniture, FURNITURE } from '@/lib/wardrobe'
 import { getLevel } from '@/lib/levels'
+import { loadOutfits } from '@/lib/outfits'
 
 export const revalidate = 30
 
@@ -22,9 +23,10 @@ export default async function DashboardPage() {
   const weekStart = getCurrentWeekStart()
   const weekStartStr = weekStart.toISOString().split('T')[0]
 
-  const [{ data: week }, { data: users }] = await Promise.all([
+  const [{ data: week }, { data: users }, outfits] = await Promise.all([
     supabase.from('weeks').select('id, is_closed').eq('week_start', weekStartStr).maybeSingle(),
     supabase.from('users').select('id, display_name, avatar_url, total_xp, level').order('total_xp', { ascending: false }),
+    loadOutfits(),
   ])
 
   const attendances: any[] = []
@@ -47,7 +49,7 @@ export default async function DashboardPage() {
     : null
 
   const today = helsinkiWeekday()
-  const allUsers = users ?? []
+  const allUsers = (users ?? []).map(u => ({ ...u, outfit: outfits[u.id] ?? null }))
   const teamXp = allUsers.reduce((s, u) => s + u.total_xp, 0)
   const inIds = new Set(today ? attendances.filter(a => a.days.includes(today)).map(a => a.user_id) : [])
   const inOffice = allUsers.filter(u => inIds.has(u.id))
@@ -90,7 +92,7 @@ export default async function DashboardPage() {
                 />
               ))}
             </div>
-            <p className="mt-1 text-[15px]" style={{ color: 'var(--text-muted)' }}>
+            <p className="mt-1 text-[18px]" style={{ color: 'var(--text-muted)' }}>
               {Math.min(eventState.totalDays, event.teamGoalDays)} of {event.teamGoalDays} team office days. <a href="/lore" className="underline">Read the story</a>
             </p>
           </section>
@@ -106,11 +108,11 @@ export default async function DashboardPage() {
           </div>
           {elsewhere.length > 0 && (
             <div className="mt-3 px-box-inset p-3">
-              <p className="font-pixel text-[10px] mb-2" style={{ color: 'var(--text-muted)' }}>ELSEWHERE {today === null ? 'THIS WEEKEND' : 'TODAY'}</p>
+              <p className="font-pixel text-[11px] mb-2" style={{ color: 'var(--text-muted)' }}>ELSEWHERE {today === null ? 'THIS WEEKEND' : 'TODAY'}</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2">
                 {elsewhere.map(u => (
                   <a key={u.id} href={`/player/${u.id}`} className="flex items-center gap-1 no-underline" style={{ color: 'var(--text-muted)' }}>
-                    <Avatar look={lookFor(u.display_name, u.id)} outfit={outfitFor(getLevel(u.total_xp).level)} size={36} title={u.display_name} />
+                    <Avatar look={lookFor(u.display_name, u.id)} outfit={outfitFor(getLevel(u.total_xp).level, u.outfit)} size={52} title={u.display_name} />
                     <span>{u.display_name.split(' ')[0]}</span>
                   </a>
                 ))}
@@ -148,16 +150,17 @@ export default async function DashboardPage() {
 
         <section>
           <h2 className="font-pixel text-[12px] mb-3">HALL OF FAME</h2>
-          <Leaderboard users={users ?? []} weekXpMap={weekXpMap} />
+          <Leaderboard users={allUsers} weekXpMap={weekXpMap} />
         </section>
 
-        <section>
-          <h2 className="font-pixel text-[12px] mb-3">WARDROBE</h2>
+        <section id="wardrobe">
+          <h2 className="font-pixel text-[12px] mb-1">WARDROBE</h2>
+          <p className="mb-3" style={{ color: 'var(--text-muted)' }}>Every item in the realm. Pick what you wear from the Wardrobe button in the weekly Slack poll.</p>
           <Wardrobe users={allUsers} />
         </section>
 
         <footer className="pt-6" style={{ color: 'var(--text-faint)' }}>
-          Log your days from the weekly poll in Slack. XP is awarded when the week closes on Friday. Your XP unlocks things to wear, and together the team&apos;s XP furnishes the office.
+          Log your days from the weekly poll in Slack. XP is awarded when the week closes on Friday. Your XP unlocks things to wear, which you pick from the Wardrobe button in the Slack poll, and together the team&apos;s XP furnishes the office.
         </footer>
       </div>
     </main>
