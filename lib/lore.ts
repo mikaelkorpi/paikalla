@@ -16,6 +16,27 @@ export const CHAPTERS: Chapter[] = [
   { level: 10, title: 'Told through you', text: 'The realm no longer needs to be explored by you. When people describe Ilmiö, they are describing you.' },
 ]
 
+export const TRAVELLERS =
+  'Nobody is born into Ilmiö as a monster any more. Every traveller walks in looking like themselves, and the realm remembers their face. What changes is what they carry. Each level opens a new piece of the wardrobe: a mug from the Machine, a party hat, headphones for the quiet hours, and much later a top hat, a crown and a cape. Unlocked things stay unlocked for good, and every traveller chooses what to wear from the Wardrobe in the weekly Slack poll.'
+
+export const THE_OFFICE =
+  'The office itself is alive. It started with the Machine, six desks and a rug, and it grows as the travellers do. Every point of XP anyone earns goes into a shared pool, and when the pool is deep enough the office furnishes itself with something new. On any given day the room shows who is actually in. Those working elsewhere wait just outside the door.'
+
+export const FURNITURE_LORE: Record<string, string> = {
+  machine: 'Was here before anyone. Still hisses at newcomers.',
+  desks: 'Six of them. One wobbles, and everyone knows which.',
+  rug: 'Marks the middle of the realm.',
+  plant: 'Nobody waters it on purpose, yet it keeps growing.',
+  sofa: 'Where the best candidate stories get told.',
+  shelf: 'Full of books that nobody has quite finished.',
+  jukebox: 'Plays the Friday soundtrack, whether asked or not.',
+  arcade: 'The high score belongs to someone who refuses to say who.',
+  aquarium: 'Two fish. Both of them are called Talent.',
+  neon: 'The sign on the wall finally starts to glow.',
+  ballpit: 'Nobody asked for it. Everybody uses it.',
+  throne: 'Reserved for whoever kept the office alive.',
+}
+
 export const HAUNTING =
   'Once a year, in the last week of October, the realm is not itself. Five ghosts move into Ilmiö: one in the Machine, one under the good desk, one in the quiet call room, two in the kitchen. They feed on empty chairs. Every day a traveller spends at the office banishes a little of them, and when the whole team has logged enough days the office is clear again. The travellers who stood their ground for two days or more are remembered as Ghost hunters.'
 

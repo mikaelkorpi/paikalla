@@ -43,6 +43,12 @@ export function paintAvatar(look: Look, outfit: Outfit): Grid {
     rect(1, 18, 10, 18, '#7a1222')
   }
 
+  // Backpack peeks out behind the shoulders
+  if (outfit.back === 'backpack') {
+    rect(1, 10, 10, 16, '#2e7d6b')
+    rect(1, 10, 10, 10, '#3fa08a')
+  }
+
   // Long hair falls behind the shoulders
   if (look.hair === 'long') {
     rect(2, 4, 9, 14, hair)
@@ -110,13 +116,30 @@ export function paintAvatar(look: Look, outfit: Outfit): Grid {
       break
   }
 
+  // Backpack straps
+  if (outfit.back === 'backpack') {
+    rect(3, 11, 3, 14, '#1f5a4c'); rect(8, 11, 8, 14, '#1f5a4c')
+  }
+
   // Face item
   if (outfit.face === 'shades') {
     rect(3, 6, 8, 6, '#0b0b12'); set(4, 6, '#3d5a8a'); set(7, 6, '#3d5a8a')
   }
+  if (outfit.face === 'glasses') {
+    set(3, 6, '#2b2b33'); set(5, 6, '#2b2b33'); set(6, 6, '#2b2b33'); set(8, 6, '#2b2b33')
+    set(4, 5, '#2b2b33'); set(7, 5, '#2b2b33')
+  }
+  if (outfit.face === 'monocle') {
+    set(6, 6, '#f5c542'); set(8, 6, '#f5c542'); set(7, 5, '#f5c542'); set(7, 7, '#f5c542')
+    set(8, 8, '#c99a1f'); set(8, 9, '#c99a1f'); set(9, 10, '#c99a1f')
+  }
 
   // Head item
   switch (outfit.head) {
+    case 'partyhat':
+      set(6, -2, '#f5c542')
+      rect(5, -1, 6, -1, '#e84393'); rect(5, 0, 7, 0, '#4fc3e8'); rect(4, 1, 7, 1, '#e84393'); rect(4, 2, 8, 2, '#4fc3e8')
+      break
     case 'beanie':
       rect(3, 1, 8, 3, '#c0392b'); rect(3, 3, 8, 3, '#e8e2d0'); rect(5, 0, 6, 0, '#e8e2d0')
       break
@@ -153,6 +176,9 @@ export function paintAvatar(look: Look, outfit: Outfit): Grid {
   switch (outfit.hand) {
     case 'mug':
       rect(11, 13, 12, 15, '#f4efe0'); set(13, 14, '#f4efe0'); set(11, 13, '#6b4a2f')
+      break
+    case 'laptop':
+      rect(10, 12, 13, 15, '#9aa4b0'); rect(11, 12, 12, 14, '#4fc3e8'); rect(10, 15, 13, 15, '#5d6675')
       break
     case 'trophy':
       rect(10, 11, 13, 12, '#f5c542'); rect(11, 13, 12, 14, '#f5c542'); rect(10, 15, 13, 15, '#c99a1f')

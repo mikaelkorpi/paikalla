@@ -46,6 +46,11 @@ export function buildPollBlocks(
         },
         {
           type: 'button',
+          text: { type: 'plain_text', text: '🎩 Wardrobe' },
+          action_id: 'open_wardrobe_modal',
+        },
+        {
+          type: 'button',
           text: { type: 'plain_text', text: '🏆 Office Quest' },
           action_id: 'open_dashboard',
           url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
@@ -56,6 +61,11 @@ export function buildPollBlocks(
     blocks.push({
       type: 'actions',
       elements: [
+        {
+          type: 'button',
+          text: { type: 'plain_text', text: '🎩 Wardrobe' },
+          action_id: 'open_wardrobe_modal',
+        },
         {
           type: 'button',
           text: { type: 'plain_text', text: '🏆 Office Quest' },
