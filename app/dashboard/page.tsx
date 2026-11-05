@@ -81,7 +81,7 @@ export default async function DashboardPage() {
           <section className="px-box p-4" style={{ borderColor: 'var(--gold)' }}>
             <div className="flex items-baseline justify-between gap-3 flex-wrap">
               <h2 className="font-pixel text-[12px]" style={{ color: 'var(--gold)' }}>{event.title.toUpperCase()}</h2>
-              <span className="text-[22px] leading-none" aria-label={`${eventState.remaining} ghosts remaining`}>{eventState.meter}</span>
+              <span className="text-[22px] leading-none" aria-label={`${eventState.done} of ${event.meterSize} done`}>{eventState.meter}</span>
             </div>
             <p className="mt-2 max-w-prose">{eventState.text}</p>
             <div className="mt-3 flex gap-[3px]" aria-hidden="true">
