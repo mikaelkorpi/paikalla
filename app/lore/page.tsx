@@ -1,5 +1,5 @@
 import { LEVELS } from '@/lib/levels'
-import { CHAPTERS, WORLD_INTRO, HAUNTING, TRAVELLERS, THE_OFFICE, FURNITURE_LORE } from '@/lib/lore'
+import { CHAPTERS, WORLD_INTRO, HAUNTING, LONG_NIGHT, BADGES_LORE, TRAVELLERS, THE_OFFICE, FURNITURE_LORE } from '@/lib/lore'
 import { Sprite } from '@/lib/sprite'
 import { Avatar } from '@/lib/avatar'
 import { WEARABLES, FURNITURE, type Outfit } from '@/lib/wardrobe'
@@ -92,6 +92,21 @@ export default function LorePage() {
           </div>
         </section>
 
+        <section className="px-box p-4" style={{ borderColor: 'var(--gold)' }}>
+          <div className="flex gap-4">
+            <Avatar look={TRAVELLER} outfit={{ head: 'elfhat', hand: 'gingerbread' }} size={72} title="A traveller dressed for the Long Night" />
+            <div>
+              <h2 className="font-pixel text-[12px] mb-2" style={{ color: 'var(--gold)' }}>THE LONG NIGHT</h2>
+              <p className="max-w-prose" style={{ color: 'var(--text-muted)' }}>{LONG_NIGHT}</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="px-box p-4">
+          <h2 className="font-pixel text-[12px] mb-2">BADGES</h2>
+          <p className="max-w-prose" style={{ color: 'var(--text-muted)' }}>{BADGES_LORE}</p>
+        </section>
+
         <section className="px-box p-4">
           <h2 className="font-pixel text-[12px] mb-3">HOW XP IS EARNED</h2>
           <ul className="space-y-1" style={{ color: 'var(--text-muted)' }}>
@@ -101,6 +116,7 @@ export default function LorePage() {
             <li>Lone guardian: 30 XP for being the only one in on a given day.</li>
             <li>Unbroken chain: 100 XP for four weeks in a row.</li>
             <li>Ghost hunter: 40 XP for 2+ days during the Haunting, if the team banishes the ghosts.</li>
+            <li>The Long Night: 40 XP and a gift to wear for 2+ days in each advent week, if the team lights all five candles.</li>
           </ul>
           <p className="mt-3" style={{ color: 'var(--text-muted)' }}>
             Your own XP raises your level and opens the wardrobe. Everyone&apos;s XP together furnishes the office.
