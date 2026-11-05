@@ -166,6 +166,16 @@ export function paintAvatar(look: Look, outfit: Outfit): Grid {
     case 'tophat':
       rect(4, -2, 7, 2, '#15151c'); rect(4, 1, 7, 1, '#9b1c2e'); rect(2, 3, 9, 3, '#15151c')
       break
+    case 'elfhat':
+      rect(3, 1, 8, 2, '#2e8b3e'); rect(4, 0, 8, 0, '#2e8b3e'); rect(6, -1, 9, -1, '#2e8b3e'); rect(9, 0, 10, 0, '#2e8b3e')
+      set(5, 1, '#c0392b'); set(7, 0, '#c0392b')
+      rect(3, 3, 8, 3, '#f4efe0'); set(10, 1, '#f4efe0'); set(11, 1, '#f4efe0')
+      break
+    case 'antlers':
+      set(3, 3, '#8a5a32'); set(8, 3, '#8a5a32')
+      rect(2, 0, 2, 2, '#8a5a32'); set(1, -1, '#8a5a32'); set(1, -2, '#8a5a32'); set(3, -1, '#a8743f'); set(0, 0, '#a8743f')
+      rect(9, 0, 9, 2, '#8a5a32'); set(10, -1, '#8a5a32'); set(10, -2, '#8a5a32'); set(8, -1, '#a8743f'); set(11, 0, '#a8743f')
+      break
     case 'crown':
       set(3, 0, '#f5c542'); set(5, 0, '#f5c542'); set(6, 0, '#f5c542'); set(8, 0, '#f5c542')
       rect(3, 1, 8, 3, '#f5c542'); set(5, 2, '#e74c3c'); set(6, 2, '#4fc3e8')
@@ -179,6 +189,10 @@ export function paintAvatar(look: Look, outfit: Outfit): Grid {
       break
     case 'laptop':
       rect(10, 12, 13, 15, '#9aa4b0'); rect(11, 12, 12, 14, '#4fc3e8'); rect(10, 15, 13, 15, '#5d6675')
+      break
+    case 'gingerbread':
+      set(11, 11, '#b8743a'); rect(10, 12, 12, 13, '#b8743a'); set(11, 14, '#b8743a'); set(10, 15, '#b8743a'); set(12, 15, '#b8743a')
+      set(11, 12, '#f4efe0'); set(11, 13, '#e74c3c')
       break
     case 'trophy':
       rect(10, 11, 13, 12, '#f5c542'); rect(11, 13, 12, 14, '#f5c542'); rect(10, 15, 13, 15, '#c99a1f')
