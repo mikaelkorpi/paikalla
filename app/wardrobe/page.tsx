@@ -2,9 +2,11 @@ import { supabaseAdmin as supabase } from '@/lib/supabase'
 import { currentUserId } from '@/lib/session'
 import { getLevel } from '@/lib/levels'
 import { lookFor } from '@/lib/looks'
-import { outfitFor, SLOTS, WEARABLES, type Outfit } from '@/lib/wardrobe'
+import { outfitFor, SLOTS, WEARABLES, countUnlocked, type Outfit } from '@/lib/wardrobe'
 import { loadOutfits } from '@/lib/outfits'
 import { WardrobePicker } from '@/components/WardrobePicker'
+import { badgesFor, loadKastelijaStars, nameKey } from '@/lib/badges'
+import { BadgeShelf } from '@/components/BadgeShelf'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,11 +40,14 @@ export default async function WardrobePage({ searchParams }: { searchParams: Pro
   }
 
   const level = getLevel(user.total_xp ?? 0)
-  const saved = (await loadOutfits([user.id]))[user.id] ?? null
+  const [outfits, starsByName] = await Promise.all([loadOutfits([user.id]), loadKastelijaStars()])
+  const saved = outfits[user.id] ?? null
+  const earned = saved?.earned ?? []
+  const stars = starsByName[nameKey(user.display_name)] ?? 0
   const wearing = outfitFor(level.level, saved)
   // Start from what the avatar wears now, with every other slot empty
   const initial: Outfit = Object.fromEntries(SLOTS.map(s => [s.key, wearing[s.key] ?? 'none']))
-  const unlocked = WEARABLES.filter(w => level.level >= w.level).length
+  const unlocked = countUnlocked(level.level, earned)
 
   return (
     <main className="min-h-screen">
@@ -54,7 +59,11 @@ export default async function WardrobePage({ searchParams }: { searchParams: Pro
             {user.display_name}, Lv{level.level} {level.title}. {unlocked} of {WEARABLES.length} items unlocked.
           </p>
         </header>
-        <WardrobePicker look={lookFor(user.display_name, user.id)} level={level.level} initial={initial} />
+        <WardrobePicker look={lookFor(user.display_name, user.id)} level={level.level} earned={earned} initial={initial} />
+        <section>
+          <h2 className="font-pixel text-[12px] mb-3">BADGES</h2>
+          <BadgeShelf badges={badgesFor(earned, stars)} stars={stars} />
+        </section>
       </div>
     </main>
   )
