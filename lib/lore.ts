@@ -40,6 +40,12 @@ export const FURNITURE_LORE: Record<string, string> = {
 export const HAUNTING =
   'Once a year, in the last week of October, the realm is not itself. Five ghosts move into Ilmiö: one in the Machine, one under the good desk, one in the quiet call room, two in the kitchen. They feed on empty chairs. Every day a traveller spends at the office banishes a little of them, and when the whole team has logged enough days the office is clear again. The travellers who stood their ground for two days or more are remembered as Ghost hunters.'
 
+export const LONG_NIGHT =
+  'In December the sun barely visits Helsinki, and the realm grows quiet. For three weeks before the midwinter feast the travellers keep the Long Night at bay by lighting candles: five each week, one for every two days someone spends at the office. When all five burn, everyone who came in at least twice that week receives a gift from the realm. First an elf hat, then a gingerbread friend, and for the feast itself a pair of reindeer antlers. Gifts from the Long Night can only be earned that week, and they stay in the wardrobe for good.'
+
+export const BADGES_LORE =
+  'Badges are the marks a traveller collects along the way. Every event week the team wins leaves one behind. The office plants keep their own record in Kastelija, and every 50 stars earned there by watering them adds a plant badge, all the way to 500.'
+
 export function chapterFor(level: number): Chapter {
   return CHAPTERS.find(c => c.level === level) ?? CHAPTERS[0]
 }
@@ -51,6 +57,9 @@ export const EVENT_NAMES: Record<string, string> = {
   office_warrior: 'Lone guardian',
   streak: 'Unbroken chain',
   event_ghost_hunter: 'Ghost hunter',
+  event_advent_1: 'First light',
+  event_advent_2: 'Frost keeper',
+  event_advent_3: 'Midwinter guest',
 }
 
 export function eventName(type: string): string {
