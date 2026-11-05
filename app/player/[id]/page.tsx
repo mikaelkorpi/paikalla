@@ -4,8 +4,10 @@ import { getLevel, levelColor } from '@/lib/levels'
 import { chapterFor, eventName } from '@/lib/lore'
 import { Avatar } from '@/lib/avatar'
 import { lookFor } from '@/lib/looks'
-import { outfitFor, wearable, WEARABLES } from '@/lib/wardrobe'
+import { outfitFor, wearable, WEARABLES, SLOTS, countUnlocked } from '@/lib/wardrobe'
 import { loadOutfits } from '@/lib/outfits'
+import { badgesFor, loadKastelijaStars, nameKey } from '@/lib/badges'
+import { BadgeShelf } from '@/components/BadgeShelf'
 import { XpBar } from '@/components/XpBar'
 import { formatWeekLabel } from '@/lib/week'
 
@@ -24,13 +26,16 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
     .maybeSingle()
   if (!user) notFound()
 
-  const [{ data: weeks }, { data: attendance }, { data: events }, outfits] = await Promise.all([
+  const [{ data: weeks }, { data: attendance }, { data: events }, outfits, starsByName] = await Promise.all([
     supabase.from('weeks').select('id, week_start, is_closed').order('week_start', { ascending: false }),
     supabase.from('attendance').select('week_id, days').eq('user_id', id),
     supabase.from('xp_events').select('week_id, type, xp, description').eq('user_id', id),
     loadOutfits([id]),
+    loadKastelijaStars(),
   ])
   const saved = outfits[id] ?? null
+  const stars = starsByName[nameKey(user.display_name)] ?? 0
+  const badges = badgesFor(saved?.earned ?? [], stars)
   const look = lookFor(user.display_name, user.id)
 
   const level = getLevel(user.total_xp)
@@ -82,10 +87,15 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             <XpBar xp={user.total_xp} />
           </div>
           <p className="mt-3 text-[17px]" style={{ color: 'var(--text-muted)' }}>
-            Wearing {Object.values(outfitFor(level.level, saved)).map(k => wearable(k)?.name).filter(Boolean).join(', ') || 'nothing special'}.{' '}
-            {WEARABLES.filter(w => level.level >= w.level).length} of {WEARABLES.length} items unlocked.{' '}
+            Wearing {SLOTS.map(sl => outfitFor(level.level, saved)[sl.key]).map(k => k && wearable(k)?.name).filter(Boolean).join(', ') || 'nothing special'}.{' '}
+            {countUnlocked(level.level, saved?.earned)} of {WEARABLES.length} items unlocked.{' '}
             <a href="/wardrobe" className="underline">My wardrobe</a>
           </p>
+        </section>
+
+        <section>
+          <h2 className="font-pixel text-[12px] mb-3">BADGES</h2>
+          <BadgeShelf badges={badges} stars={stars} />
         </section>
 
         <section className="grid grid-cols-3 gap-3">
