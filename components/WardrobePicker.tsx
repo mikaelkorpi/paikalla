@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Avatar } from '@/lib/avatar'
-import { SLOTS, WEARABLES, type Outfit, type Slot } from '@/lib/wardrobe'
+import { SLOTS, WEARABLES, isUnlocked, type Earned, type Outfit, type Slot } from '@/lib/wardrobe'
 import type { Look } from '@/lib/looks'
 
 // Pick one item (or nothing) per slot, see it on your avatar right away, then save.
-export function WardrobePicker({ look, level, initial }: { look: Look; level: number; initial: Outfit }) {
+export function WardrobePicker({ look, level, earned, initial }: { look: Look; level: number; earned: Earned; initial: Outfit }) {
   const router = useRouter()
   const [outfit, setOutfit] = useState<Outfit>(initial)
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
@@ -57,7 +57,7 @@ export function WardrobePicker({ look, level, initial }: { look: Look; level: nu
           <h2 className="font-pixel text-[12px] mb-3">{slot.name.toUpperCase()}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {WEARABLES.filter(w => w.slot === slot.key).map(w => {
-              const unlocked = level >= w.level
+              const unlocked = isUnlocked(w, level, earned)
               const worn = outfit[slot.key] === w.key
               return (
                 <button
@@ -77,7 +77,7 @@ export function WardrobePicker({ look, level, initial }: { look: Look; level: nu
                   <span className="min-w-0">
                     <span className="block leading-tight">{w.name}</span>
                     <span className="block text-[18px]" style={{ color: worn ? 'var(--gold)' : unlocked ? 'var(--green)' : 'var(--text-faint)' }}>
-                      {worn ? 'Wearing' : unlocked ? 'Unlocked' : `🔒 Lv${w.level}`}
+                      {worn ? 'Wearing' : unlocked ? (w.event ? `${w.eventName} gear` : 'Unlocked') : w.event ? `🔒 ${w.eventName}` : `🔒 Lv${w.level}`}
                     </span>
                   </span>
                 </button>
